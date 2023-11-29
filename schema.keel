@@ -1,0 +1,20 @@
+model User {
+    fields {
+        identity Identity @unique
+        name Text
+    }
+
+    actions {
+        create createUser() with (name) {
+            @set(user.identity = ctx.identity)
+        }
+        get myUser() {
+            @where(user.identity == ctx.identity)
+        }
+    }
+
+    @permission(
+        actions: [create, get],
+        expression: ctx.isAuthenticated
+    )
+}
